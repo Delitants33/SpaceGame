@@ -38,13 +38,14 @@ namespace Model
 
         public void RotateBy(float angle)
         {
-            this.Rotation += angle;
+            this.Rotation += angle % 360;
+            Debug.Print($"{this.Rotation}");
             RocketRotated(this.Rotation);
         }
 
         public void RotateTo(float angle)
         {
-            this.Rotation = angle;
+            this.Rotation = angle % 360;
             RocketRotated(this.Rotation);
         }
     }

@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Model;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -11,7 +12,7 @@ namespace Space
     internal static class Controller
     {
         private static Rocket rocket;
-        static float RotationSpeed = 0.01f;
+        static float RotationSpeed = 0.1f;
 
         public static void Init()
         {
@@ -25,11 +26,11 @@ namespace Space
                 rocket.MoveBy(new Vector2(1,0) * rocket.MaxSpeed);
             }
             if (Keyboard.GetState().IsKeyDown (Keys.Q)) {
-                rocket.RotateBy(RotationSpeed);
+                rocket.RotateBy(-RotationSpeed);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
-                rocket.RotateBy(-RotationSpeed);
+                rocket.RotateBy(RotationSpeed);
             }
         }
     }

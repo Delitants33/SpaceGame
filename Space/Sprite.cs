@@ -12,7 +12,7 @@ namespace Space
         public Texture2D texture;
         public Vector2 position;
         public float rotation;
-        public float Scale  = 1;
+        public float Scale  = 1f;
 
         public Rectangle Rectangle 
         {
@@ -29,6 +29,7 @@ namespace Space
             this.position = position;
             this.Scale = Scale;
         }
+
         public Sprite(Texture2D texture, Vector2 position, float rotation,  float Scale = 1)
         {
             this.texture = texture;
@@ -44,7 +45,7 @@ namespace Space
 
         public void Rotate(float angle)
         {
-            rotation += angle;
+            rotation = angle;
         }
 
         public virtual void Update() 

@@ -19,6 +19,7 @@ namespace Space
         {
             this.rocketSprite = rocketSprite;
         }
+
         public void Update(Rocket rocket)
         {
             rocketSprite.MoveSpriteTo(rocket.Position);

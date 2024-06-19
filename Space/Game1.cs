@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Model;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -33,7 +34,7 @@ namespace Space
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), new Vector2(0,0));
+            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), new Vector2(100,100));
             RocketRenderer rocketRender = new RocketRenderer(rocketSprite);
             Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
             Rocket.RocketRotated += rocketSprite.Rotate;
@@ -59,6 +60,7 @@ namespace Space
         {
             GraphicsDevice.Clear(Color.Bisque);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
             foreach (var sprite in sprites)
             {
                 _spriteBatch.Draw(
