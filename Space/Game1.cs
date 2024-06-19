@@ -18,8 +18,6 @@ namespace Space
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -42,7 +40,7 @@ namespace Space
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Magenta);
 
             // TODO: Add your drawing code here
 
