@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Space", "Space\Space.csproj", "{0EE81C05-3265-4D67-8E97-7CC4A2628BCC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Space", "Space\Space.csproj", "{0EE81C05-3265-4D67-8E97-7CC4A2628BCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{E800C6E3-12D1-4151-868B-6B36E8E293EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contoller", "Contoller\Contoller.csproj", "{98AA91F6-E4F9-4D08-8007-BC7464AD1B5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{0EE81C05-3265-4D67-8E97-7CC4A2628BCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EE81C05-3265-4D67-8E97-7CC4A2628BCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EE81C05-3265-4D67-8E97-7CC4A2628BCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E800C6E3-12D1-4151-868B-6B36E8E293EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E800C6E3-12D1-4151-868B-6B36E8E293EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E800C6E3-12D1-4151-868B-6B36E8E293EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E800C6E3-12D1-4151-868B-6B36E8E293EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98AA91F6-E4F9-4D08-8007-BC7464AD1B5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98AA91F6-E4F9-4D08-8007-BC7464AD1B5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98AA91F6-E4F9-4D08-8007-BC7464AD1B5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98AA91F6-E4F9-4D08-8007-BC7464AD1B5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
