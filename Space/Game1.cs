@@ -33,9 +33,10 @@ namespace Space
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), new Vector2(0,0));
+            RocketRenderer rocketRender = new RocketRenderer(rocketSprite);
             Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
+            Rocket.RocketRotated += rocketSprite.Rotate;
             sprites.Add(rocketSprite);
         }
 
@@ -57,16 +58,21 @@ namespace Space
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Bisque);
-
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
             foreach (var sprite in sprites)
             {
-                _spriteBatch.Draw(sprite.texture, sprite.Rectangle, Color.White);
+                _spriteBatch.Draw(
+                    sprite.texture,
+                    sprite.position,
+                    null,
+                    Color.White,
+                    sprite.rotation,
+                    new Vector2(sprite.texture.Width / 2, sprite.texture.Height / 2), 
+                    sprite.Scale,
+                    SpriteEffects.None,
+                    0f);
             }
-
             _spriteBatch.End();
-
             base.Draw(gameTime);
         }
     }

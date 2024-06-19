@@ -11,6 +11,7 @@ namespace Space
     {
         public Texture2D texture;
         public Vector2 position;
+        public float rotation;
         public float Scale  = 1;
 
         public Rectangle Rectangle 
@@ -24,6 +25,14 @@ namespace Space
         public Sprite(Texture2D texture, Vector2 position, float Scale = 1)
         {
             this.texture = texture;
+            this.rotation = 0;
+            this.position = position;
+            this.Scale = Scale;
+        }
+        public Sprite(Texture2D texture, Vector2 position, float rotation,  float Scale = 1)
+        {
+            this.texture = texture;
+            this.rotation = rotation;
             this.position = position;
             this.Scale = Scale;
         }
@@ -31,6 +40,11 @@ namespace Space
         public void MoveSpriteTo(Vector2 position)
         {
             this.position = position;
+        }
+
+        public void Rotate(float angle)
+        {
+            rotation += angle;
         }
 
         public virtual void Update() 
