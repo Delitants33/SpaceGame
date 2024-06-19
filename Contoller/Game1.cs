@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Model;
 
 namespace Contoller
 {
@@ -8,6 +9,8 @@ namespace Contoller
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private Rocket rocket;
 
         public Game1()
         {
@@ -18,7 +21,7 @@ namespace Contoller
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            rocket = Creator.Rocket;
 
             base.Initialize();
         }
@@ -35,7 +38,10 @@ namespace Contoller
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            {
+                rocket.MoveBy(new Vector2(1, 0));
+            }
 
             base.Update(gameTime);
         }

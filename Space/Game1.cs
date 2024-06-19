@@ -1,6 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Model;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
 
 namespace Space
 {
@@ -8,6 +12,9 @@ namespace Space
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private Rocket Rocket;
+        List<Sprite> sprites = new();
 
         public Game1()
         {
@@ -18,6 +25,8 @@ namespace Space
 
         protected override void Initialize()
         {
+            Rocket = Creator.CreateRocket(new Vector2(0,0));
+            Controller.Init();
             base.Initialize();
         }
 
@@ -25,7 +34,9 @@ namespace Space
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), new Vector2(0,0));
+            Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
+            sprites.Add(rocketSprite);
         }
 
         protected override void Update(GameTime gameTime)
@@ -33,7 +44,12 @@ namespace Space
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            Controller.Update();
+
+            foreach (var sprite in sprites)
+            {
+                sprite.Update();
+            }
 
             base.Update(gameTime);
         }
@@ -42,7 +58,14 @@ namespace Space
         {
             GraphicsDevice.Clear(Color.Bisque);
 
-            // TODO: Add your drawing code here
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
+
+            foreach (var sprite in sprites)
+            {
+                _spriteBatch.Draw(sprite.texture, sprite.Rectangle, Color.White);
+            }
+
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
