@@ -40,7 +40,7 @@ namespace Space
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.LightCoral);
+            GraphicsDevice.Clear(Color.Bisque);
 
             // TODO: Add your drawing code here
 
