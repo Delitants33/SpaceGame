@@ -26,7 +26,7 @@ namespace Space
 
         protected override void Initialize()
         {
-            Rocket = Creator.CreateRocket(new Vector2(0,0));
+            Rocket = Creator.CreateRocket(new Vector2(100,100));
             Controller.Init();
             base.Initialize();
         }
@@ -34,7 +34,7 @@ namespace Space
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), new Vector2(100,100));
+            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), Rocket.Position);
             RocketRenderer rocketRender = new RocketRenderer(rocketSprite);
             Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
             Rocket.RocketRotated += rocketSprite.Rotate;

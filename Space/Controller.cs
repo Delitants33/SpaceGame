@@ -25,7 +25,8 @@ namespace Space
             {
                 rocket.MoveBy(new Vector2(1,0) * rocket.MaxSpeed);
             }
-            if (Keyboard.GetState().IsKeyDown (Keys.Q)) {
+            if (Keyboard.GetState().IsKeyDown (Keys.Q)) 
+            {
                 rocket.RotateBy(-RotationSpeed);
             }
             if (Keyboard.GetState().IsKeyDown(Keys.E))
