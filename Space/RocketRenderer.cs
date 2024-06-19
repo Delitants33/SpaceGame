@@ -24,19 +24,6 @@ namespace Space
             rocketSprite.MoveSpriteTo(rocket.Position);
             rocketSprite.Rotate(rocket.Rotation);
         }
-        /*
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(
-                rocketSprite.texture,
-                rocketSprite.position,
-                null,
-                Color.White,
-                MathHelper.ToRadians(rocketSprite.rotation),
-                new Vector2(rocketSprite.texture.Width / 2, rocketSprite.texture.Height / 2),
-                rocketSprite.Scale,
-                SpriteEffects.None,
-                0f);
-        }*/
+
     }
 }
