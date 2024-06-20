@@ -41,6 +41,7 @@ namespace Space
             }
             if (Keyboard.GetState().IsKeyDown (Keys.Space)) {
                 RocketLaunched();
+               // GameManager.Launch()
             }
         }
     }

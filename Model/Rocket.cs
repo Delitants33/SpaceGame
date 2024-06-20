@@ -35,44 +35,40 @@ namespace Model
             RocketRotated(this.Rotation);
         }
 
-        public override void RotateAround(Vector2 center, float rotationSpeed)
+        public override void RotateAround(Vector2 center, float rotationSpeed, bool isClockWise = true)
         {
             base.RotateAround(center, rotationSpeed);
             var toCenter = center - this.Position;
-            var normalToCenter = new Vector2(-toCenter.Y, toCenter.X);
+
+            Vector2 normalToCenter = isClockWise ?
+                new Vector2(toCenter.Y, -toCenter.X):
+                new Vector2(-toCenter.Y, toCenter.X); 
+
             normalToCenter.Normalize();
             normalToCenter *= Vector2.Distance(center, Position);
-            Rotation = (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) + 200;
-            RocketRotated(Rotation);
-        }
-        public override void RotateAroundCounterClockwise(Vector2 center, float rotationSpeed)
-        {
-            base.RotateAround(center, -rotationSpeed);
-            var toCenter = center - this.Position;
-            var normalToCenter = new Vector2(toCenter.Y, -toCenter.X);
-            normalToCenter.Normalize();
-            normalToCenter *= Vector2.Distance(center, Position);
-            Rotation = (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) -MathHelper.PiOver2;
+
+            Rotation = isClockWise?
+                (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) + MathHelper.PiOver2 :
+                (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) - MathHelper.PiOver2;
+
             RocketRotated(Rotation);
         }
 
         public void Launch(float speed) {
-            velocity = new Vector2((float)Math.Cos(Rotation + 80), (float)Math.Sin(Rotation + 80));  //no clue where this 80 came from. 
-            MoveBy(velocity * speed);
-
+            velocity = new Vector2(
+                (float)Math.Cos(Rotation + 3 * Math.PI / 2),
+                (float)Math.Sin(Rotation + 3 * Math.PI / 2)) * speed;  //no clue where this 80 came from. 
+            MoveBy(velocity);
         }
 
-        public void CheckIfReachablePlanets(ref Planet planet, ref Planet previousPlanet) 
+        public void IsReachablePlanets(ref Planet planet, ref Planet previousPlanet) 
         {
-            if (Vector2.Distance(this.Position, planet.Position) < planet.Radius-1)
+            if (Vector2.Distance(this.Position, planet.Position) < planet.Radius )
             {
                 (planet, previousPlanet) = (previousPlanet, planet);
                 velocity = new Vector2(0, 0);
                 OnTieToPlanet();
-            };
+            }
         }
-
-
-
     }
 }

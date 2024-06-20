@@ -16,17 +16,14 @@ namespace Model
         private static Planet nextPlanet; //temporary
         public static bool isLaunched = false;
 
-
         public static void Initialize() 
         {
             rocket = Creator.CreateRocket(new Vector2(100,100));
             planet = Creator.CreateNewPlanet(new Vector2(0,0));
             nextPlanet = Creator.CreateNewPlanet(new Vector2(0, 0));
             planet.SetRandomPosition(new Rectangle(100, 100, 300, 300));
-            nextPlanet.SetRandomPosition(new Rectangle(150, 100, 600, 350));
+            nextPlanet.SetRandomPosition(new Rectangle(150, 200, 600, 350));
             rocket.OnTieToPlanet += Tie;
-            
-
         }
 
         public static void Update() 
@@ -39,38 +36,28 @@ namespace Model
                 }
                 else
                 {
-                    rocket.RotateAroundCounterClockwise(planet.Position, 0.05f);
+                    rocket.RotateAround(planet.Position, 0.05f, false);
                 }
-
             }
             else
             {
-                rocket.Launch(10f);
+                rocket.Launch(rocket.MaxSpeed);
                 
-                rocket.CheckIfReachablePlanets(ref nextPlanet, ref planet); //probably will be foreach planet. or list of planets will be passed. UPD: awful name after i added second plane to the func
-                
+                rocket.IsReachablePlanets(ref nextPlanet, ref planet); //probably will be foreach planet. or list of planets will be passed. UPD: awful name after i added second plane to the func
             }
 
         }
 
-        public static void Launch()
-        {
-            isLaunched = true;
-        }
+        public static void Launch() => isLaunched = true;
 
-        private static void Tie()
-        {
-            isLaunched = false;
-        }
+        private static void Tie() => isLaunched = false;
 
         private static bool IsClockwise(Vector2 planetPos, Vector2 rocketPos ,Vector2 velocity )
         {
+            // TO DO
             Vector2 relativePos = rocketPos - planetPos;
             float crossProduct = relativePos.X * velocity.Y - relativePos.Y * velocity.X;
             return crossProduct > 0;
         }
-
-
-
     }
 }

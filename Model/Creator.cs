@@ -16,7 +16,7 @@ namespace Model
         public static event Action<Planet> NewPlanetCreated;
         public static event Action<Rocket> NewRocketCreated;
 
-        public static Rocket CreateRocket(Vector2 startPosition,float maxSpeed = 5)
+        public static Rocket CreateRocket(Vector2 startPosition,float maxSpeed = 8)
         {
             if (Rocket == null)
             {
