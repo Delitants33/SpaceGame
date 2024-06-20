@@ -12,8 +12,10 @@ namespace Space
     internal static class Controller
     {
         private static Rocket rocket;
-        static float RotationSpeed = 0.1f;
+        static readonly float RotationSpeed = 0.1f;
+        static readonly float velocity = 0.1f;
         public static event Action FullScreenToggled;
+        public static event Action RocketLaunched;
 
         public static void Init()
         {
@@ -36,6 +38,9 @@ namespace Space
             }
             if (Keyboard.GetState().IsKeyDown (Keys.F11)) {
                 FullScreenToggled();
+            }
+            if (Keyboard.GetState().IsKeyDown (Keys.Space)) {
+                RocketLaunched();
             }
         }
     }

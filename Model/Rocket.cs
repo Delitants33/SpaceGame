@@ -15,6 +15,7 @@ namespace Model
         public float Rotation { get; private set; } // angles in degrees not radians
 
         public event Action<float> RocketRotated;
+        public event Action OnTieToPlanet;
 
         public Rocket(Vector2 position, float maxSpeed) : base(position)
         {
@@ -37,9 +38,40 @@ namespace Model
         {
             base.RotateAround(center, rotationSpeed);
             var toCenter = center - this.Position;
-            var normalToCenter = new Vector2(-toCenter.Y,toCenter.X);
+            var normalToCenter = new Vector2(-toCenter.Y, toCenter.X);
+            normalToCenter.Normalize();
+            normalToCenter *= Vector2.Distance(center, Position);
             Rotation = (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) + 200;
             RocketRotated(Rotation);
         }
+        public override void RotateAroundCounterClockwise(Vector2 center, float rotationSpeed)
+        {
+            base.RotateAround(center, rotationSpeed);
+            var toCenter = center - this.Position;
+            var normalToCenter = new Vector2(toCenter.Y, -toCenter.X);
+            normalToCenter.Normalize();
+            normalToCenter *= Vector2.Distance(center, Position);
+            Rotation = (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) + 200;
+            RocketRotated(Rotation);
+        }
+
+        public void Launch(float speed) {
+            Vector2 direction = new Vector2((float)Math.Cos(Rotation + 80), (float)Math.Sin(Rotation + 80));  //no clue where this 80 came from. 
+            MoveBy(direction * speed);
+
+        }
+
+        public void CheckIfReachablePlanets(ref Planet planet, ref Planet previousPlanet) 
+        {
+            previousPlanet.Radius = 0;
+            if (Vector2.Distance(this.Position, planet.Position) < planet.Radius)
+            {
+                (planet, previousPlanet) = (previousPlanet, planet);
+                OnTieToPlanet();
+            };
+        }
+
+
+
     }
 }

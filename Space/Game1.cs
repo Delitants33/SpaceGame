@@ -28,6 +28,8 @@ namespace Space
         {
             Creator.NewPlanetCreated += LoadNewPlanet;
             Creator.NewRocketCreated += LoadRocket;
+            Controller.RocketLaunched += HandleLaunch;
+
             GameManager.Initialize();
             Controller.Init();
             base.Initialize();
@@ -57,7 +59,6 @@ namespace Space
 
         protected override void Draw(GameTime gameTime)
         {
-            Random radiusNoise = new Random();
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
@@ -86,6 +87,11 @@ namespace Space
             _graphics.ApplyChanges();
         }
 
+        private void HandleLaunch()
+        {
+            GameManager.Launch();
+        }
+
         #region LoadNewContent
         private void LoadRocket(Rocket rocket)
         {
@@ -98,9 +104,9 @@ namespace Space
         private void LoadNewPlanet(Planet planet)
         {
             var rand = new Random();
-            var planetSplite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,8)), planet.Position,1.5f);
-            planet.ObjectMoved += planetSplite.MoveSpriteTo;
-            sprites.Add(planetSplite);
+            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,8)), planet.Position,1.5f);
+            planet.ObjectMoved += planetSprite.MoveSpriteTo;
+            sprites.Add(planetSprite);
         }
         #endregion LoadNewContent
     }
