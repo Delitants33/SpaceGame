@@ -11,7 +11,6 @@ namespace Model
     public class Planet : GameObject
     {
         public float Radius;
-        public event Action<Vector2> PlanetMoved;
 
         public Planet(Vector2 position, float radius) : base(position)
         {
@@ -21,21 +20,10 @@ namespace Model
         public void SetRandomPosition(Rectangle rec)
         {
             Random randomPosition = new Random();
-            this.Position = new Vector2(
+            this.MoveTo(
                 randomPosition.Next(rec.X, rec.X + rec.Width),
                 randomPosition.Next(rec.Y, rec.Y + rec.Height));
-        }
 
-        public override void MoveTo(Vector2 position)
-        {
-            base.MoveTo(position);
-            PlanetMoved(position);
-        }
-
-        public override void MoveBy(Vector2 offset)
-        {
-            base.MoveBy(offset);
-            PlanetMoved(Position);
         }
     }
 }

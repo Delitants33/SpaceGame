@@ -14,12 +14,14 @@ namespace Model
         public static List<Planet> Planets { get; private set; } = new List<Planet>();
 
         public static event Action<Planet> NewPlanetCreated;
+        public static event Action<Rocket> NewRocketCreated;
 
         public static Rocket CreateRocket(Vector2 startPosition,float maxSpeed = 5)
         {
             if (Rocket == null)
             {
                 Rocket = new Rocket(startPosition, maxSpeed);
+                NewRocketCreated(Rocket);
                 return Rocket;
             }
             else

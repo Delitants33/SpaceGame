@@ -13,7 +13,7 @@ namespace Space
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Rocket Rocket;
+
         List<Sprite> sprites = new();
 
         public Game1()
@@ -26,9 +26,9 @@ namespace Space
 
         protected override void Initialize()
         {
-            Rocket = Creator.CreateRocket(new Vector2(100,100));
             Creator.NewPlanetCreated += LoadNewPlanet;
-            Creator.CreateNewPlanet(new Vector2(100,100));
+            Creator.NewRocketCreated += LoadRocket;
+            GameManager.Initialize();
             Controller.Init();
             base.Initialize();
         }
@@ -36,8 +36,6 @@ namespace Space
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            LoadRocket();
 
             Controller.FullScreenToggled += ToggleFullScreen;
         }
@@ -48,7 +46,7 @@ namespace Space
                 Exit();
 
             Controller.Update();
-
+            GameManager.Update();
             foreach (var sprite in sprites)
             {
                 sprite.Update();
@@ -89,11 +87,11 @@ namespace Space
         }
 
         #region LoadNewContent
-        private void LoadRocket()
+        private void LoadRocket(Rocket rocket)
         {
-            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), Rocket.Position,0.2f);
-            Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
-            Rocket.RocketRotated += rocketSprite.Rotate;
+            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), rocket.Position,0.2f);
+            rocket.ObjectMoved += rocketSprite.MoveSpriteTo;
+            rocket.RocketRotated += rocketSprite.Rotate;
             sprites.Add(rocketSprite);
         }
 
@@ -101,7 +99,7 @@ namespace Space
         {
             var rand = new Random();
             var planetSplite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,8)), planet.Position,1.5f);
-            planet.PlanetMoved += planetSplite.MoveSpriteTo;
+            planet.ObjectMoved += planetSplite.MoveSpriteTo;
             sprites.Add(planetSplite);
         }
         #endregion LoadNewContent

@@ -14,24 +14,11 @@ namespace Model
         public readonly float MaxSpeed; 
         public float Rotation { get; private set; } // angles in degrees not radians
 
-        public event Action<Vector2> RocketMoved;
         public event Action<float> RocketRotated;
 
         public Rocket(Vector2 position, float maxSpeed) : base(position)
         {
             this.MaxSpeed = maxSpeed;
-        }
-
-        public override void MoveTo(Vector2 position)
-        {
-            base.MoveTo(position);
-            RocketMoved(position);
-        }
-
-        public override void MoveBy(Vector2 offset)
-        {
-            base.MoveBy(offset);
-            RocketMoved(Position);
         }
 
         public void RotateBy(float angle)
@@ -44,6 +31,15 @@ namespace Model
         {
             this.Rotation = angle % 360;
             RocketRotated(this.Rotation);
+        }
+
+        public override void RotateAround(Vector2 center, float rotationSpeed)
+        {
+            base.RotateAround(center, rotationSpeed);
+            var toCenter = center - this.Position;
+            var normalToCenter = new Vector2(-toCenter.Y,toCenter.X);
+            Rotation = (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) + 200;
+            RocketRotated(Rotation);
         }
     }
 }
