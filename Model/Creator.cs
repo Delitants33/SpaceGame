@@ -28,7 +28,7 @@ namespace Model
                 return Rocket;
         }
 
-        public static Planet CreateNewPlanet(Vector2 startPosition, float radius = 100)
+        public static Planet CreateNewPlanet(Vector2 startPosition, float radius = 150)
         {
             var newPlanet = new Planet(startPosition, radius);
             Planets.Add(newPlanet);
