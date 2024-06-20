@@ -8,35 +8,33 @@ using System.Net;
 
 namespace Model
 {
-    public class Planet
+    public class Planet : GameObject
     {
-        public Vector2 Position { get; private set; }
         public float Radius;
-
         public event Action<Vector2> PlanetMoved;
 
-        public Planet(Vector2 position, float radius) 
+        public Planet(Vector2 position, float radius) : base(position)
         {
-            this.Position = position;
             this.Radius = radius;
         }
 
         public void SetRandomPosition(Rectangle rec)
         {
             Random randomPosition = new Random();
-            Position = new Vector2(randomPosition.Next(rec.X, rec.X + rec.Width), randomPosition.Next(rec.Y, rec.Y + rec.Height));
-            
+            this.Position = new Vector2(
+                randomPosition.Next(rec.X, rec.X + rec.Width),
+                randomPosition.Next(rec.Y, rec.Y + rec.Height));
         }
 
-        public void MoveTo(Vector2 position)
+        public override void MoveTo(Vector2 position)
         {
-            this.Position = position;
+            base.MoveTo(position);
             PlanetMoved(position);
         }
 
-        public void MoveBy(Vector2 offset)
+        public override void MoveBy(Vector2 offset)
         {
-            this.Position += offset;
+            base.MoveBy(offset);
             PlanetMoved(Position);
         }
     }

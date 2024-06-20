@@ -9,37 +9,34 @@ using System.Net;
 
 namespace Model
 {
-    public class Rocket
+    public class Rocket : GameObject
     {
         public readonly float MaxSpeed; 
-        public Vector2 Position { get; private set; }
         public float Rotation { get; private set; } // angles in degrees not radians
 
         public event Action<Vector2> RocketMoved;
         public event Action<float> RocketRotated;
 
-        public Rocket(Vector2 position, float maxSpeed)
+        public Rocket(Vector2 position, float maxSpeed) : base(position)
         {
-            this.Position = position;
             this.MaxSpeed = maxSpeed;
         }
 
-        public void MoveTo(Vector2 position)
+        public override void MoveTo(Vector2 position)
         {
-            this.Position = position;
+            base.MoveTo(position);
             RocketMoved(position);
         }
 
-        public void MoveBy(Vector2 offset)
+        public override void MoveBy(Vector2 offset)
         {
-            this.Position += offset;
+            base.MoveBy(offset);
             RocketMoved(Position);
         }
 
         public void RotateBy(float angle)
         {
             this.Rotation += angle % 360;
-            Debug.Print($"{this.Rotation}");
             RocketRotated(this.Rotation);
         }
 

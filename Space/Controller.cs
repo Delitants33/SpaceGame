@@ -34,7 +34,7 @@ namespace Space
             {
                 rocket.RotateBy(RotationSpeed);
             }
-            if (Keyboard.GetState ().IsKeyDown (Keys.F11)) {
+            if (Keyboard.GetState().IsKeyDown (Keys.F11)) {
                 FullScreenToggled();
             }
         }

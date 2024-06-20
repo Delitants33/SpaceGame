@@ -15,7 +15,6 @@ namespace Space
         private SpriteBatch _spriteBatch;
         private Rocket Rocket;
         List<Sprite> sprites = new();
-        List<Planet> planets = new();
 
         public Game1()
         {
@@ -28,8 +27,8 @@ namespace Space
         protected override void Initialize()
         {
             Rocket = Creator.CreateRocket(new Vector2(100,100));
-            planets.Add(Creator.CreateNewPlanet(new Vector2(0, 0), 100));
-            planets[0].SetRandomPosition(new Rectangle (10, 10, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width-10, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 10));
+            Creator.NewPlanetCreated += LoadNewPlanet;
+            Creator.CreateNewPlanet(new Vector2(100,100));
             Controller.Init();
             base.Initialize();
         }
@@ -37,17 +36,10 @@ namespace Space
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            
-            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), Rocket.Position);
-            Random random = new Random();
-            var randomNumber = random.Next(1, 8);
-            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + randomNumber.ToString()), planets[0].Position);
-            planetSprite.Scale = PlanetRenderer.SetPlanetScale();
-            Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
-            Rocket.RocketRotated += rocketSprite.Rotate;
+
+            LoadRocket();
+
             Controller.FullScreenToggled += ToggleFullScreen;
-            sprites.Add(rocketSprite);
-            sprites.Add(planetSprite);
         }
 
         protected override void Update(GameTime gameTime)
@@ -71,34 +63,47 @@ namespace Space
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-            var sprite = sprites[0]; //this is a bit tricky now (i think we'll change it). But the first element of the list is the rocket
-            _spriteBatch.Draw( //and all next elements are planets. And i want to draw them separately
-                sprite.texture,
+            foreach (var sprite in sprites)
+            {
+                _spriteBatch.Draw(sprite.texture,
                 sprite.position,
                 null,
                 Color.White,
                 sprite.rotation,
-                new Vector2(sprite.texture.Width / 2, sprite.texture.Height / 2), 
-                0.1f,
+                new Vector2(sprite.texture.Width / 2, sprite.texture.Height / 2),
+                sprite.Scale,
                 SpriteEffects.None,
                 0f);
-            
-            for (int i = 1; i < sprites.Count; i++)
-            {
-                var planetSprite = sprites[i];
-                PlanetRenderer.DrawPlanet(_spriteBatch, planetSprite);
-                
             }
+
             _spriteBatch.End();
             base.Draw(gameTime);
         }
 
         public void ToggleFullScreen()
         {
-            _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            //_graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+            //_graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
         }
+
+        #region LoadNewContent
+        private void LoadRocket()
+        {
+            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), Rocket.Position,0.2f);
+            Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
+            Rocket.RocketRotated += rocketSprite.Rotate;
+            sprites.Add(rocketSprite);
+        }
+
+        private void LoadNewPlanet(Planet planet)
+        {
+            var rand = new Random();
+            var planetSplite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,8)), planet.Position,1.5f);
+            planet.PlanetMoved += planetSplite.MoveSpriteTo;
+            sprites.Add(planetSplite);
+        }
+        #endregion LoadNewContent
     }
 }

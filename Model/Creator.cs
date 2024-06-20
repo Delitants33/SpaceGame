@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -11,6 +12,8 @@ namespace Model
     {
         public static Rocket Rocket { get; private set; }
         public static List<Planet> Planets { get; private set; } = new List<Planet>();
+
+        public static event Action<Planet> NewPlanetCreated;
 
         public static Rocket CreateRocket(Vector2 startPosition,float maxSpeed = 5)
         {
@@ -27,6 +30,7 @@ namespace Model
         {
             var newPlanet = new Planet(startPosition, radius);
             Planets.Add(newPlanet);
+            NewPlanetCreated(newPlanet);
             return newPlanet;
         }
     }
