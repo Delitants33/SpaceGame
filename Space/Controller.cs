@@ -13,6 +13,7 @@ namespace Space
     {
         private static Rocket rocket;
         static float RotationSpeed = 0.1f;
+        public static event Action FullScreenToggled;
 
         public static void Init()
         {
@@ -32,6 +33,9 @@ namespace Space
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
                 rocket.RotateBy(RotationSpeed);
+            }
+            if (Keyboard.GetState ().IsKeyDown (Keys.F11)) {
+                FullScreenToggled();
             }
         }
     }
