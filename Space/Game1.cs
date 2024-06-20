@@ -15,6 +15,7 @@ namespace Space
         private SpriteBatch _spriteBatch;
         private Rocket Rocket;
         List<Sprite> sprites = new();
+        List<Planet> planets = new();
 
         public Game1()
         {
@@ -27,7 +28,8 @@ namespace Space
         protected override void Initialize()
         {
             Rocket = Creator.CreateRocket(new Vector2(100,100));
-            
+            planets.Add(Creator.CreateNewPlanet(new Vector2(0, 0), 100));
+            planets[0].SetRandomPosition(new Rectangle (10, 10, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width-10, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 10));
             Controller.Init();
             base.Initialize();
         }
@@ -39,9 +41,8 @@ namespace Space
             var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), Rocket.Position);
             Random random = new Random();
             var randomNumber = random.Next(1, 8);
-            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + randomNumber.ToString()), new Vector2(0, 0));
+            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + randomNumber.ToString()), planets[0].Position);
             planetSprite.Scale = PlanetRenderer.SetPlanetScale();
-            planetSprite.position = PlanetRenderer.SetRandomPosition(GraphicsDevice, planetSprite);
             Rocket.RocketMoved += rocketSprite.MoveSpriteTo;
             Rocket.RocketRotated += rocketSprite.Rotate;
             Controller.FullScreenToggled += ToggleFullScreen;
@@ -78,7 +79,7 @@ namespace Space
                 Color.White,
                 sprite.rotation,
                 new Vector2(sprite.texture.Width / 2, sprite.texture.Height / 2), 
-                0.5f,
+                0.1f,
                 SpriteEffects.None,
                 0f);
             

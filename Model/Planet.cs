@@ -21,6 +21,13 @@ namespace Model
             this.Radius = radius;
         }
 
+        public Vector2 SetRandomPosition(Rectangle rec)
+        {
+            Random randomPosition = new Random();
+            return new Vector2(randomPosition.Next(rec.X, rec.X + rec.Width), randomPosition.Next(rec.Y, rec.Y + rec.Height));
+            
+        }
+
         public void MoveTo(Vector2 position)
         {
             this.Position = position;

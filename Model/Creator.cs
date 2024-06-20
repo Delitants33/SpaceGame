@@ -10,7 +10,7 @@ namespace Model
     public static class Creator
     {
         public static Rocket Rocket { get; private set; }
-        public static List<Planet> Planets { get; private set; }
+        public static List<Planet> Planets { get; private set; } = new List<Planet>();
 
         public static Rocket CreateRocket(Vector2 startPosition,float maxSpeed = 5)
         {

@@ -17,14 +17,7 @@ namespace Space
             Random radiusNoise = new Random();
             return planetRadius + (float)radiusNoise.Next(0, 3) / 2;
         }
-        public static Vector2 SetRandomPosition(GraphicsDevice device, Sprite planet)
-        {
-            Random random = new Random();
-            var randX = random.Next(planet.texture.Width, device.Viewport.Width - planet.texture.Width / 2); 
-            var randY = random.Next(planet.texture.Height, device.Viewport.Height - planet.texture.Height / 2);
-            return new Vector2(randX, randY);
 
-        }
 
         public static void DrawPlanet(SpriteBatch spriteBatch, Sprite planet)
         {
