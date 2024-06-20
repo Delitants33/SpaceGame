@@ -95,8 +95,8 @@ namespace Space
 
         public void ToggleFullScreen()
         {
-            //_graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-            //_graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+            _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
             _graphics.IsFullScreen = !_graphics.IsFullScreen;
             _graphics.ApplyChanges();
         }
