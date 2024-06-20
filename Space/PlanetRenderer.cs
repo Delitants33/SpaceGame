@@ -15,7 +15,7 @@ namespace Space
         public static float SetPlanetScale()
         {
             Random radiusNoise = new Random();
-            return planetRadius + (float)radiusNoise.Next(0, 1) / 3;
+            return planetRadius + (float)radiusNoise.Next(0, 3) / 2;
         }
         public static Vector2 SetRandomPosition(GraphicsDevice device, Sprite planet)
         {
