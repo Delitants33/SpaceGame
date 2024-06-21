@@ -13,37 +13,35 @@ namespace Model
     {
         private static Rocket rocket; // temporaly or not)
         private static Planet planet; // temporaly or not)
-        private static Planet nextPlanet; //temporary
+        private static Planet nextPlanet;
         public static bool isLaunched = false;
+        private static bool isClockwise = false;
 
         public static void Initialize() 
         {
-            rocket = Creator.CreateRocket(new Vector2(100,100));
-            planet = Creator.CreateNewPlanet(new Vector2(0,0));
-            nextPlanet = Creator.CreateNewPlanet(new Vector2(0, 0));
-            planet.SetRandomPosition(new Rectangle(100, 100, 300, 300));
-            nextPlanet.SetRandomPosition(new Rectangle(150, 200, 600, 350));
+            rocket = Creator.CreateRocket(new Vector2(50,800));
+            planet = Creator.CreateNewPlanet(new Vector2(200,800));
+            nextPlanet = Creator.CreateNewPlanet(Vector2.Zero);
+            nextPlanet.SetRandomPosition(new Rectangle(
+                (int)nextPlanet.Position.X + 100,
+                (int)nextPlanet.Position.Y + 400,
+                800,
+                500)); 
             rocket.OnTieToPlanet += Tie;
+            rocket.OnTieToPlanet += GetNextPlanet;
         }
 
         public static void Update() 
         {
             if (!isLaunched)
             {
-                if (IsClockwise(planet.Position, rocket.Position, rocket.velocity))
-                {
-                    rocket.RotateAround(planet.Position, 0.05f);
-                }
-                else
-                {
-                    rocket.RotateAround(planet.Position, 0.05f, false);
-                }
+                    rocket.RotateAround(planet.Position, 0.05f, isClockwise);
             }
             else
             {
-                rocket.Launch(rocket.MaxSpeed);
+                UpdateTrajectory();
+                rocket.IsReachablePlanets(ref nextPlanet, ref planet);
                 
-                rocket.IsReachablePlanets(ref nextPlanet, ref planet); //probably will be foreach planet. or list of planets will be passed. UPD: awful name after i added second plane to the func
             }
 
         }
@@ -52,12 +50,30 @@ namespace Model
 
         private static void Tie() => isLaunched = false;
 
-        private static bool IsClockwise(Vector2 planetPos, Vector2 rocketPos ,Vector2 velocity )
+        private static bool IsClockwise(Vector2 planetPos, Vector2 rocketPos, Vector2 velocity )
         {
-            // TO DO
-            Vector2 relativePos = rocketPos - planetPos;
-            float crossProduct = relativePos.X * velocity.Y - relativePos.Y * velocity.X;
-            return crossProduct > 0;
+            Vector2 relativePos = planetPos - rocketPos;
+            float crossProductZ = relativePos.X * velocity.Y - relativePos.Y * velocity.X;
+            return crossProductZ < 0;
         }
-    }
+        private static void UpdateTrajectory()
+        {
+            rocket.Launch(rocket.MaxSpeed);
+            isClockwise = IsClockwise(nextPlanet.Position, rocket.Position, rocket.velocity);
+        }
+
+        //TO DO
+        private static void GetNextPlanet() // this method is very incomplete due to lack of time. 
+        {
+
+            var newPlanet = Creator.CreateNewPlanet(Vector2.Zero);
+            newPlanet.SetRandomPosition(new Rectangle(
+                (int)nextPlanet.Position.X - 400,
+                (int)nextPlanet.Position.Y - 300,
+                800,
+                400));
+            planet = nextPlanet;
+            nextPlanet = newPlanet;    
+        }
+     }
 }

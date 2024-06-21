@@ -12,7 +12,7 @@ namespace Model
     public class Rocket : GameObject
     {
         public readonly float MaxSpeed; 
-        public float Rotation { get; private set; } // angles in degrees not radians
+        public float Rotation { get; private set; } 
         public Vector2 velocity;
 
         public event Action<float> RocketRotated;
@@ -37,27 +37,20 @@ namespace Model
 
         public override void RotateAround(Vector2 center, float rotationSpeed, bool isClockWise = true)
         {
-            base.RotateAround(center, rotationSpeed);
-            var toCenter = center - this.Position;
-
-            Vector2 normalToCenter = isClockWise ?
-                new Vector2(toCenter.Y, -toCenter.X):
-                new Vector2(-toCenter.Y, toCenter.X); 
-
-            normalToCenter.Normalize();
-            normalToCenter *= Vector2.Distance(center, Position);
-
-            Rotation = isClockWise?
-                (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) + MathHelper.PiOver2 :
-                (float)Math.Atan2(normalToCenter.Y, normalToCenter.X) - MathHelper.PiOver2;
-
+            base.RotateAround(center, rotationSpeed, isClockWise);
+            var toRocket = this.Position - center;
+            Vector2 tangent = isClockWise ?
+                new Vector2(-toRocket.Y, toRocket.X) :
+                new Vector2(toRocket.Y, -toRocket.X);
+            tangent.Normalize();
+            Rotation = (float)Math.Atan2(tangent.Y, tangent.X) + MathHelper.PiOver2;
             RocketRotated(Rotation);
         }
 
         public void Launch(float speed) {
             velocity = new Vector2(
                 (float)Math.Cos(Rotation + 3 * Math.PI / 2),
-                (float)Math.Sin(Rotation + 3 * Math.PI / 2)) * speed;  //no clue where this 80 came from. 
+                (float)Math.Sin(Rotation + 3 * Math.PI / 2)) * speed;  
             MoveBy(velocity);
         }
 
@@ -65,8 +58,6 @@ namespace Model
         {
             if (Vector2.Distance(this.Position, planet.Position) < planet.Radius )
             {
-                (planet, previousPlanet) = (previousPlanet, planet);
-                velocity = new Vector2(0, 0);
                 OnTieToPlanet();
             }
         }
