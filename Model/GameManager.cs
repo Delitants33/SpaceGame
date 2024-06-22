@@ -11,8 +11,8 @@ namespace Model
 {
     public static class GameManager
     {
-        private static Rocket rocket; // temporaly or not)
-        public static Planet planet { get; private set; } // temporaly or not)
+        public static Rocket rocket; 
+        public static Planet planet { get; private set; }
         public static Planet nextPlanet { get; private set; }
         public static bool isLaunched = false;
         private static bool isClockwise = false;
@@ -20,8 +20,8 @@ namespace Model
 
         public static void Initialize() 
         {
-            rocket = Creator.CreateRocket(new Vector2(50,0));
-            planet = Creator.CreateNewPlanet(new Vector2(0,0));
+            rocket = Creator.CreateRocket(new Vector2(150,0));
+            planet = Creator.CreateNewPlanet(Vector2.Zero);
             nextPlanet = Creator.CreateNewPlanet(new Vector2(300, 200));
 
             rocket.OnTieToPlanet += Tie;
@@ -58,8 +58,7 @@ namespace Model
             isClockwise = IsClockwise(nextPlanet.Position, rocket.Position, rocket.velocity);
         }
 
-        //TO DO
-        private static void SpawnNextPlanet() // this method is very incomplete due to lack of time. 
+        private static void SpawnNextPlanet() 
         {
             var newPlanet = Creator.CreateNewPlanet(Vector2.Zero);
             newPlanet.SetRandomPosition(new Rectangle(

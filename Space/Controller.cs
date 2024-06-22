@@ -13,7 +13,6 @@ namespace Space
     {
         private static Rocket rocket;
         static readonly float RotationSpeed = 0.1f;
-        static readonly float velocity = 0.1f;
         public static event Action FullScreenToggled;
         public static event Action RocketLaunched;
 

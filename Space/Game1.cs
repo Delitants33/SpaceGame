@@ -14,6 +14,7 @@ namespace Space
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
+
         List<Sprite> sprites = new();
 
         public Game1()
@@ -36,13 +37,13 @@ namespace Space
 
             GameManager.Initialize();
             Controller.Init();
+            Trajectory.Initialize(_graphics);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-
             Controller.FullScreenToggled += ToggleFullScreen;
         }
 
@@ -68,6 +69,8 @@ namespace Space
             GraphicsDevice.Clear(Color.Black);
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
+            Trajectory.DrawTrajectory(GameManager.rocket, _graphics, _spriteBatch);
+            Trajectory.DrawOrbit(GameManager.nextPlanet, _spriteBatch, gameTime);
             foreach (var sprite in sprites)
             {
                 _spriteBatch.Draw(sprite.texture,
@@ -78,8 +81,9 @@ namespace Space
                 new Vector2(sprite.texture.Width / 2, sprite.texture.Height / 2),
                 sprite.Scale,
                 SpriteEffects.None,
-                0f);
+                1.0f);
             }
+            
 
             _spriteBatch.End();
             base.Draw(gameTime);
@@ -101,7 +105,7 @@ namespace Space
         #region LoadNewContent
         private void LoadRocket(Rocket rocket)
         {
-            var rocketSprite = new Sprite(Content.Load<Texture2D>("rocket"), rocket.Position,0.2f);
+            var rocketSprite = new Sprite(Content.Load<Texture2D>("spaceship"), rocket.Position,2f);
             rocket.ObjectMoved += rocketSprite.MoveSpriteTo;
             rocket.RocketRotated += rocketSprite.Rotate;
             sprites.Add(rocketSprite);
