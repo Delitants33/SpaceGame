@@ -7,7 +7,7 @@ using System.Net;
 
 namespace Space
 {
-    internal class Sprite
+    public class Sprite
     {
         public Texture2D texture;
         public Vector2 position;
@@ -48,8 +48,6 @@ namespace Space
             rotation = angle;
         }
 
-        public virtual void Update() 
-        {
-        }
+        public virtual void Update() { }
     }
 }

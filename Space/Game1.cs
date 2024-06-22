@@ -22,6 +22,8 @@ namespace Space
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
             _graphics.IsFullScreen = false;
+            _graphics.PreferredBackBufferHeight = 900;
+            _graphics.PreferredBackBufferWidth = 1600;
             Window.AllowUserResizing = true;
         }
 
@@ -30,6 +32,7 @@ namespace Space
             Creator.NewPlanetCreated += LoadNewPlanet;
             Creator.NewRocketCreated += LoadRocket;
             Controller.RocketLaunched += HandleLaunch;
+            Camera.graphics = _graphics;
 
             GameManager.Initialize();
             Controller.Init();
@@ -50,10 +53,12 @@ namespace Space
 
             Controller.Update();
             GameManager.Update();
+            
             foreach (var sprite in sprites)
             {
                 sprite.Update();
             }
+            Camera.Follow((GameManager.planet.Position + GameManager.nextPlanet.Position) / 2,0.05f);
 
             base.Update(gameTime);
         }
@@ -66,7 +71,7 @@ namespace Space
             foreach (var sprite in sprites)
             {
                 _spriteBatch.Draw(sprite.texture,
-                sprite.position,
+                sprite.position - Camera.Position,
                 null,
                 Color.White,
                 sprite.rotation,
@@ -105,7 +110,7 @@ namespace Space
         private void LoadNewPlanet(Planet planet)
         {
             var rand = new Random();
-            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,8)), planet.Position,1.5f);
+            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,31)), planet.Position,1.25f);
             planet.ObjectMoved += planetSprite.MoveSpriteTo;
             sprites.Add(planetSprite);
         }

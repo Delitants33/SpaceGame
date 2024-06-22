@@ -12,38 +12,33 @@ namespace Model
     public static class GameManager
     {
         private static Rocket rocket; // temporaly or not)
-        private static Planet planet; // temporaly or not)
-        private static Planet nextPlanet;
+        public static Planet planet { get; private set; } // temporaly or not)
+        public static Planet nextPlanet { get; private set; }
         public static bool isLaunched = false;
         private static bool isClockwise = false;
 
+
         public static void Initialize() 
         {
-            rocket = Creator.CreateRocket(new Vector2(50,800));
-            planet = Creator.CreateNewPlanet(new Vector2(200,800));
-            nextPlanet = Creator.CreateNewPlanet(Vector2.Zero);
-            nextPlanet.SetRandomPosition(new Rectangle(
-                (int)nextPlanet.Position.X + 100,
-                (int)nextPlanet.Position.Y + 400,
-                800,
-                500)); 
+            rocket = Creator.CreateRocket(new Vector2(50,0));
+            planet = Creator.CreateNewPlanet(new Vector2(0,0));
+            nextPlanet = Creator.CreateNewPlanet(new Vector2(300, 200));
+
             rocket.OnTieToPlanet += Tie;
-            rocket.OnTieToPlanet += GetNextPlanet;
+            rocket.OnTieToPlanet += SpawnNextPlanet;
         }
 
         public static void Update() 
         {
-            if (!isLaunched)
+            if (isLaunched)
             {
-                    rocket.RotateAround(planet.Position, 0.05f, isClockwise);
+                UpdateTrajectory();
+                rocket.IsReachablePlanets(nextPlanet,planet);
             }
             else
             {
-                UpdateTrajectory();
-                rocket.IsReachablePlanets(ref nextPlanet, ref planet);
-                
+                rocket.RotateAround(planet.Position, 0.05f, isClockwise);
             }
-
         }
 
         public static void Launch() => isLaunched = true;
@@ -56,6 +51,7 @@ namespace Model
             float crossProductZ = relativePos.X * velocity.Y - relativePos.Y * velocity.X;
             return crossProductZ < 0;
         }
+
         private static void UpdateTrajectory()
         {
             rocket.Launch(rocket.MaxSpeed);
@@ -63,17 +59,16 @@ namespace Model
         }
 
         //TO DO
-        private static void GetNextPlanet() // this method is very incomplete due to lack of time. 
+        private static void SpawnNextPlanet() // this method is very incomplete due to lack of time. 
         {
-
             var newPlanet = Creator.CreateNewPlanet(Vector2.Zero);
             newPlanet.SetRandomPosition(new Rectangle(
-                (int)nextPlanet.Position.X - 400,
-                (int)nextPlanet.Position.Y - 300,
-                800,
-                400));
+                (int)nextPlanet.Position.X + 350,
+                (int)nextPlanet.Position.Y - 400,
+                600,
+                800));
             planet = nextPlanet;
-            nextPlanet = newPlanet;    
+            nextPlanet = newPlanet;
         }
      }
 }
