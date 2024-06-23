@@ -11,13 +11,12 @@ namespace Space
 {
     internal static class Controller
     {
-        private static Rocket rocket;
-        static readonly float RotationSpeed = 0.1f;
         public static event Action FullScreenToggled;
         public static event Action RocketLaunched;
         public static event Action StartGame;
         public static event Action OnPlanetHover;
         public static event Action OnPlanetDeHover;
+        public static event Action RestartGame;
         private static bool isGameStarted = false;
 
         public static void Update()
@@ -44,6 +43,13 @@ namespace Space
             if(Keyboard.GetState().IsKeyDown(Keys.Space) && isGameStarted)
             {
                 RocketLaunched();
+            }
+            if(isGameStarted && Keyboard.GetState().IsKeyDown(Keys.R))
+            {
+                
+                
+                RestartGame();
+                isGameStarted = false;
             }
         }
     }

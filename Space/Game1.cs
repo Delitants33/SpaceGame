@@ -15,7 +15,6 @@ namespace Space
         private SpriteBatch _spriteBatch;
         private SpriteBatch _spriteBatchUI;
         private SpriteFont font;
-
         private Sprite startedPlanet;
         public bool isGameStarted = false;
         List<Sprite> sprites = new();
@@ -43,9 +42,10 @@ namespace Space
             Controller.StartGame += StartGame;
             Controller.OnPlanetHover += OnPlanetHover;
             Controller.OnPlanetDeHover += OnPlanetDeHover;
+            Controller.RestartGame += RestartGame;
             GameManager.Initialize();
-            GameManager.GameLosed += StopGame;
-            
+            GameManager.GameLost += RestartGame;
+
             Trajectory.Initialize(_graphics);
 
             Camera.Follow(GameManager.planet.Position);
@@ -88,7 +88,7 @@ namespace Space
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: Camera.TranslationMatrix);
             if (isGameStarted)
             {
-                Trajectory.DrawTrajectory(GameManager.rocket, _graphics, _spriteBatch);
+                Trajectory.DrawTrajectory(GameManager.rocket, _spriteBatch);
                 Trajectory.DrawOrbit(GameManager.nextPlanet, _spriteBatch, gameTime);
             }
             foreach (var sprite in sprites)
@@ -132,11 +132,24 @@ namespace Space
 
         private void OnPlanetDeHover() => startedPlanet.Scale = 1f;
 
-        private void StopGame()
+        private void RestartGame()
         {
-            Exit();
+            startedPlanet = null;
+            sprites.Clear();
+            GameManager.Reset();
+            Camera.Zoom = 3f;
+            Trajectory.Initialize(_graphics);
+            Camera.Follow(GameManager.planet.Position);
+            LoadRocket(GameManager.rocket);
+            GameManager.rocket.MoveTo(150, 0);
+            isGameStarted = false;
         }
 
+        private void StopGame()
+        {
+            sprites.Clear();
+            GameManager.Initialize();
+        }
         #region LoadNewContent
         private void LoadRocket(Rocket rocket)
         {

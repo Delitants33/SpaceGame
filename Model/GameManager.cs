@@ -22,7 +22,7 @@ namespace Model
         public static int Score { get; private set; }
         private static int timer = 0;
 
-        public static event Action GameLosed;
+        public static event Action GameLost;
 
         public static void Initialize() 
         {
@@ -42,8 +42,8 @@ namespace Model
             {
                 UpdateTrajectory();
                 rocket.IsReachablePlanets(nextPlanet);
-                if (IsLose())
-                    GameLosed();
+                if (IsLose()) 
+                    GameLost();
             }
             else
             {
@@ -89,6 +89,16 @@ namespace Model
         {
             timer++;
             return timer > 200;
+        } 
+       
+        public static void Reset()
+        {
+            rocket = Creator.CreateRocket(new Vector2(150, 0));
+            planet = Creator.CreateNewPlanet(Vector2.Zero);
+            nextPlanet = Creator.CreateNewPlanet(new Vector2(400, 200));
+            timer = 0;
+            Score = 0;
+            isLaunched = false;
         }
-     }
+    }
 }
