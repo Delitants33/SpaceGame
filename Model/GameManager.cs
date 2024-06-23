@@ -20,7 +20,7 @@ namespace Model
 
         public static void Initialize() 
         {
-            rocket = Creator.CreateRocket(new Vector2(50,0));
+            rocket = Creator.CreateRocket(new Vector2(100,0));
             planet = Creator.CreateNewPlanet(new Vector2(0,0));
             nextPlanet = Creator.CreateNewPlanet(new Vector2(300, 200));
 
@@ -33,7 +33,7 @@ namespace Model
             if (isLaunched)
             {
                 UpdateTrajectory();
-                rocket.IsReachablePlanets(nextPlanet,planet);
+                rocket.IsReachablePlanets(nextPlanet);
             }
             else
             {
@@ -58,8 +58,7 @@ namespace Model
             isClockwise = IsClockwise(nextPlanet.Position, rocket.Position, rocket.velocity);
         }
 
-        //TO DO
-        private static void SpawnNextPlanet() // this method is very incomplete due to lack of time. 
+        private static void SpawnNextPlanet() 
         {
             var newPlanet = Creator.CreateNewPlanet(Vector2.Zero);
             newPlanet.SetRandomPosition(new Rectangle(

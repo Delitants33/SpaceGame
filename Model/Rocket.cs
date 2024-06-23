@@ -54,7 +54,7 @@ namespace Model
             MoveBy(velocity);
         }
 
-        public void IsReachablePlanets( Planet planet, Planet previousPlanet) 
+        public void IsReachablePlanets(Planet planet) 
         {
             if (Vector2.Distance(this.Position, planet.Position) < planet.Radius )
             {
