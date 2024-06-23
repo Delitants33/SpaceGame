@@ -15,32 +15,35 @@ namespace Space
         static readonly float RotationSpeed = 0.1f;
         public static event Action FullScreenToggled;
         public static event Action RocketLaunched;
-
-        public static void Init()
-        {
-            rocket = Creator.Rocket;
-        }
+        public static event Action StartGame;
+        public static event Action OnPlanetHover;
+        public static event Action OnPlanetDeHover;
+        private static bool isGameStarted = false;
 
         public static void Update()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            MouseState ms = Mouse.GetState();
+            Vector2 mousePos = new Vector2(ms.X, ms.Y);
+
+            if (!isGameStarted && Vector2.Distance(Camera.ViewportCenter, mousePos) < 155f)
             {
-                rocket.MoveBy(new Vector2(1,0) * rocket.MaxSpeed);
+                OnPlanetHover();
+                if (ms.LeftButton == ButtonState.Pressed)
+                {
+                    isGameStarted = true;
+                    StartGame();
+                }
             }
-            if (Keyboard.GetState().IsKeyDown (Keys.Q)) 
+            if (!isGameStarted && Vector2.Distance(Camera.ViewportCenter, mousePos) > 165f)
             {
-                rocket.RotateBy(-RotationSpeed);
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.E))
-            {
-                rocket.RotateBy(RotationSpeed);
+                OnPlanetDeHover();
             }
             if (Keyboard.GetState().IsKeyDown (Keys.F11)) {
                 FullScreenToggled();
             }
-            if (Keyboard.GetState().IsKeyDown (Keys.Space)) {
+            if(Keyboard.GetState().IsKeyDown(Keys.Space) && isGameStarted)
+            {
                 RocketLaunched();
-               // GameManager.Launch()
             }
         }
     }

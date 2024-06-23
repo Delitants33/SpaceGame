@@ -13,8 +13,11 @@ namespace Space
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private SpriteBatch _spriteBatchUI;
+        private SpriteFont font;
 
-
+        private Sprite startedPlanet;
+        public bool isGameStarted = false;
         List<Sprite> sprites = new();
 
         public Game1()
@@ -30,21 +33,31 @@ namespace Space
 
         protected override void Initialize()
         {
+            Camera.ViewportHeight = _graphics.GraphicsDevice.Viewport.Height;
+            Camera.ViewportWidth = _graphics.GraphicsDevice.Viewport.Width;
+            Camera.graphics = _graphics;
+            Camera.Zoom = 3f;
             Creator.NewPlanetCreated += LoadNewPlanet;
             Creator.NewRocketCreated += LoadRocket;
             Controller.RocketLaunched += HandleLaunch;
-            Camera.graphics = _graphics;
-
+            Controller.StartGame += StartGame;
+            Controller.OnPlanetHover += OnPlanetHover;
+            Controller.OnPlanetDeHover += OnPlanetDeHover;
             GameManager.Initialize();
-            Controller.Init();
+            GameManager.GameLosed += StopGame;
+            
             Trajectory.Initialize(_graphics);
+
+            Camera.Follow(GameManager.planet.Position);
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatchUI = new SpriteBatch(GraphicsDevice);
             Controller.FullScreenToggled += ToggleFullScreen;
+            font = Content.Load<SpriteFont>("Fonts/Arial");
         }
 
         protected override void Update(GameTime gameTime)
@@ -59,22 +72,29 @@ namespace Space
             {
                 sprite.Update();
             }
-            Camera.Follow((GameManager.planet.Position + GameManager.nextPlanet.Position) / 2,0.05f);
 
+            if (isGameStarted)
+            {
+                Camera.Zoom = MathHelper.Lerp(Camera.Zoom,1f,0.05f);
+                Camera.Follow((GameManager.planet.Position + GameManager.nextPlanet.Position) / 2, 0.05f);
+            }
+            
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-
-            Trajectory.DrawTrajectory(GameManager.rocket, _graphics, _spriteBatch);
-            Trajectory.DrawOrbit(GameManager.nextPlanet, _spriteBatch, gameTime);
+            _spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: Camera.TranslationMatrix);
+            if (isGameStarted)
+            {
+                Trajectory.DrawTrajectory(GameManager.rocket, _graphics, _spriteBatch);
+                Trajectory.DrawOrbit(GameManager.nextPlanet, _spriteBatch, gameTime);
+            }
             foreach (var sprite in sprites)
             {
                 _spriteBatch.Draw(sprite.texture,
-                sprite.position - Camera.Position,
+                sprite.position,
                 null,
                 Color.White,
                 sprite.rotation,
@@ -83,9 +103,16 @@ namespace Space
                 SpriteEffects.None,
                 1.0f);
             }
-            
 
             _spriteBatch.End();
+
+            if (isGameStarted) 
+            { 
+            _spriteBatchUI.Begin();
+            _spriteBatchUI.DrawString(font, "Score " + GameManager.Score,
+                new Vector2(_graphics.PreferredBackBufferWidth / 2 - 50, 20), Color.White);
+            _spriteBatchUI.End();
+            }
             base.Draw(gameTime);
         }
 
@@ -97,9 +124,17 @@ namespace Space
             _graphics.ApplyChanges();
         }
 
-        private void HandleLaunch()
+        private void HandleLaunch() => GameManager.Launch();
+
+        private void StartGame() => isGameStarted = true;
+
+        private void OnPlanetHover() => startedPlanet.Scale = 1.1f;
+
+        private void OnPlanetDeHover() => startedPlanet.Scale = 1f;
+
+        private void StopGame()
         {
-            GameManager.Launch();
+            Exit();
         }
 
         #region LoadNewContent
@@ -114,9 +149,11 @@ namespace Space
         private void LoadNewPlanet(Planet planet)
         {
             var rand = new Random();
-            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,31)), planet.Position,1.25f);
+            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,32)), planet.Position,1.25f);
             planet.ObjectMoved += planetSprite.MoveSpriteTo;
             sprites.Add(planetSprite);
+            if (startedPlanet == null)
+                startedPlanet = planetSprite;
         }
         #endregion LoadNewContent
     }

@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using static System.Formats.Asn1.AsnWriter;
 
 
 namespace Model
@@ -16,13 +19,17 @@ namespace Model
         public static Planet nextPlanet { get; private set; }
         public static bool isLaunched = false;
         private static bool isClockwise = false;
+        public static int Score { get; private set; }
+        private static int timer = 0;
 
+        public static event Action GameLosed;
 
         public static void Initialize() 
         {
             rocket = Creator.CreateRocket(new Vector2(150,0));
             planet = Creator.CreateNewPlanet(Vector2.Zero);
-            nextPlanet = Creator.CreateNewPlanet(new Vector2(300, 200));
+            nextPlanet = Creator.CreateNewPlanet(new Vector2(400, 200));
+            Score = 0;
 
             rocket.OnTieToPlanet += Tie;
             rocket.OnTieToPlanet += SpawnNextPlanet;
@@ -30,20 +37,28 @@ namespace Model
 
         public static void Update() 
         {
+
             if (isLaunched)
             {
                 UpdateTrajectory();
                 rocket.IsReachablePlanets(nextPlanet);
+                if (IsLose())
+                    GameLosed();
             }
             else
             {
+                timer = 0;
                 rocket.RotateAround(planet.Position, 0.05f, isClockwise);
             }
         }
 
         public static void Launch() => isLaunched = true;
 
-        private static void Tie() => isLaunched = false;
+        private static void Tie() 
+        {
+            Score++;
+            isLaunched = false; 
+        }
 
         private static bool IsClockwise(Vector2 planetPos, Vector2 rocketPos, Vector2 velocity )
         {
@@ -68,6 +83,12 @@ namespace Model
                 800));
             planet = nextPlanet;
             nextPlanet = newPlanet;
+        }
+
+        private static bool IsLose()
+        {
+            timer++;
+            return timer > 200;
         }
      }
 }

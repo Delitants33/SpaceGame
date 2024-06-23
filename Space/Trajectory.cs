@@ -13,15 +13,17 @@ namespace Space
         private static Texture2D line;
         private const int dashLength = 30;
         private const int gap = 15;
-        private const int trajectoryLength = 1000;
+        private const int trajectoryLength = 2000;
         private const int lineThickness = 3;
         private const int orbitDashesCount = 20;
         private const int dashesInOrbit = 10;
+
         public static void Initialize(GraphicsDeviceManager graphics)
         {
             line = new Texture2D(graphics.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
             line.SetData(new[] { Color.LightGray });
         }
+
         public static void DrawTrajectory(Rocket rocket, GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
         {
             float rotation = rocket.Rotation - MathHelper.PiOver2;
@@ -31,14 +33,20 @@ namespace Space
                 float dashStartX = rocket.Position.X + i * (dashLength + gap) * (float)Math.Cos(rotation);
                 float dashStartY = rocket.Position.Y + i * (dashLength + gap) * (float)Math.Sin(rotation);
                 Rectangle lineRectangle = new Rectangle(
-                    (int)(dashStartX - Camera.Position.X),
-                    (int)(dashStartY - Camera.Position.Y),
+                    (int)(dashStartX),
+                    (int)(dashStartY),
                     dashLength,
                     lineThickness);
+                if (Vector2.Distance(
+                    new Vector2(dashStartX, dashStartY),
+                    GameManager.nextPlanet.Position) < 
+                    GameManager.nextPlanet.Radius/2)
+                    break;
 
-                spriteBatch.Draw(line, lineRectangle, null, Color.Gray, rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
+                spriteBatch.Draw(line, lineRectangle, null, Color.DarkGray, rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
             }
         }
+
         public static void DrawOrbit(Planet planet, SpriteBatch spriteBatch, GameTime gameTime)
         {
             float rotationSpeed = 0.1f;
@@ -50,12 +58,12 @@ namespace Space
                     float dashStartX = planet.Position.X + (float)Math.Cos(angle) * planet.Radius;
                     float dashStartY = planet.Position.Y + (float)Math.Sin(angle) * planet.Radius;
                     Rectangle lineRectangle = new Rectangle(
-                            (int)(dashStartX - Camera.Position.X),
-                            (int)(dashStartY - Camera.Position.Y),
+                            (int)(dashStartX),
+                            (int)(dashStartY),
                             lineThickness,
                             lineThickness);
 
-                    spriteBatch.Draw(line, lineRectangle, null, Color.Gray, 0, Vector2.Zero, SpriteEffects.None, 0.1f);
+                    spriteBatch.Draw(line, lineRectangle, null, Color.DarkGray, 0, Vector2.Zero, SpriteEffects.None, 0.1f);
                 }
             }
         }
