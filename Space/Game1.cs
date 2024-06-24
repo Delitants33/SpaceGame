@@ -14,6 +14,7 @@ namespace Space
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private SpriteBatch _spriteBatchUI;
+        private SpriteBatch _spriteBatchBG;
         private SpriteFont font;
         private Sprite startedPlanet;
         private bool isGameStarted = false;
@@ -51,7 +52,7 @@ namespace Space
             GameManager.GameLost += StopGame;
 
             Trajectory.Initialize(_graphics);
-            
+            Paralax.Initialize(_graphics);
 
             Camera.Follow(GameManager.planet.Position);
             base.Initialize();
@@ -61,6 +62,7 @@ namespace Space
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _spriteBatchUI = new SpriteBatch(GraphicsDevice);
+            _spriteBatchBG = new SpriteBatch(GraphicsDevice);
             Controller.FullScreenToggled += ToggleFullScreen;
             font = Content.Load<SpriteFont>("Fonts/pixelmix");
             loseScene = new Cutscene(GraphicsDevice, Content.Load<Texture2D>("damaged"), this);
@@ -99,6 +101,10 @@ namespace Space
                 loseScene.Play(font); 
                 return;
             }
+            _spriteBatchBG.Begin();
+            Paralax.Draw(_spriteBatchBG);
+            Paralax.CheckToDrawNewStars();
+            _spriteBatchBG.End();
 
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: Camera.TranslationMatrix);
             if (isGameStarted)

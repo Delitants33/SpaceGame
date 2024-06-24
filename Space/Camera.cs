@@ -31,7 +31,6 @@ namespace Space
                 Matrix.CreateScale(new Vector3(Zoom, Zoom, 1)) * 
                 Matrix.CreateTranslation(new Vector3(ViewportWidth / 2, ViewportHeight / 2, 0)); 
         }
-
         
         public static void Follow(Vector2 position, float followSpeed = 0.2f)
         {       
@@ -44,12 +43,5 @@ namespace Space
         }
 
         public static void Follow(Vector2 position) => Follow(position, 1f);
-
-        public static void AdjustZoom(float amount)
-        {
-            Zoom += amount;
-            if (Zoom < 0.25f)
-                Zoom = 0.25f;
-        }
     }
 }
