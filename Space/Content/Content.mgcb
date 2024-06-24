@@ -25,12 +25,12 @@
 /processorParam:TextureFormat=Color
 /build:Blue.png
 
-#begin Fonts/Arial.spritefont
+#begin Fonts/File.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:Fonts/Arial.spritefont
+/build:Fonts/File.spritefont
 
 #begin Main Ship - Base - Full health.png
 /importer:TextureImporter
