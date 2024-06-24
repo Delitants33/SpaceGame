@@ -24,7 +24,7 @@ namespace Space
             line.SetData(new[] { Color.LightGray });
         }
 
-        public static void DrawTrajectory(Rocket rocket, GraphicsDeviceManager graphics, SpriteBatch spriteBatch)
+        public static void DrawTrajectory(Rocket rocket, SpriteBatch spriteBatch)
         {
             float rotation = rocket.Rotation - MathHelper.PiOver2;
             int dashesCount = trajectoryLength / (dashLength + gap);

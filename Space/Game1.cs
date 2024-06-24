@@ -15,10 +15,11 @@ namespace Space
         private SpriteBatch _spriteBatch;
         private SpriteBatch _spriteBatchUI;
         private SpriteFont font;
-
         private Sprite startedPlanet;
-        public bool isGameStarted = false;
+        private bool isGameStarted = false;
+        private bool isCutscenePlaying = false;
         List<Sprite> sprites = new();
+        private Cutscene loseScene;
 
         public Game1()
         {
@@ -43,10 +44,12 @@ namespace Space
             Controller.StartGame += StartGame;
             Controller.OnPlanetHover += OnPlanetHover;
             Controller.OnPlanetDeHover += OnPlanetDeHover;
+            Controller.RestartGame += RestartGame;
             GameManager.Initialize();
-            GameManager.GameLosed += StopGame;
-            
+            GameManager.GameLost += StopGame;
+
             Trajectory.Initialize(_graphics);
+            
 
             Camera.Follow(GameManager.planet.Position);
             base.Initialize();
@@ -57,15 +60,18 @@ namespace Space
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _spriteBatchUI = new SpriteBatch(GraphicsDevice);
             Controller.FullScreenToggled += ToggleFullScreen;
-            font = Content.Load<SpriteFont>("Fonts/Arial");
+            font = Content.Load<SpriteFont>("Fonts/pixelmix");
+            loseScene = new Cutscene(GraphicsDevice, Content.Load<Texture2D>("damaged"), this);
         }
 
         protected override void Update(GameTime gameTime)
         {
+            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             Controller.Update();
+            if (isCutscenePlaying) return;
             GameManager.Update();
             
             foreach (var sprite in sprites)
@@ -84,11 +90,17 @@ namespace Space
 
         protected override void Draw(GameTime gameTime)
         {
+            
             GraphicsDevice.Clear(Color.Black);
+            if (isCutscenePlaying)
+            {
+                //Camera.Follow(new Vector2(-1000, 0));
+                loseScene.Play(font); return;
+            }
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: Camera.TranslationMatrix);
             if (isGameStarted)
             {
-                Trajectory.DrawTrajectory(GameManager.rocket, _graphics, _spriteBatch);
+                Trajectory.DrawTrajectory(GameManager.rocket, _spriteBatch);
                 Trajectory.DrawOrbit(GameManager.nextPlanet, _spriteBatch, gameTime);
             }
             foreach (var sprite in sprites)
@@ -132,11 +144,28 @@ namespace Space
 
         private void OnPlanetDeHover() => startedPlanet.Scale = 1f;
 
-        private void StopGame()
+        public void RestartGame()
         {
-            Exit();
+            isCutscenePlaying = false;
+            Controller.isGameStarted = false;
+            startedPlanet = null;
+            sprites.Clear();
+            GameManager.Reset();
+            Camera.Zoom = 3f;
+            Trajectory.Initialize(_graphics);
+            Camera.Follow(GameManager.planet.Position);
+            LoadRocket(GameManager.rocket);
+            GameManager.rocket.MoveTo(150, 0);
+            isGameStarted = false;
+            
         }
 
+        private void StopGame()
+        {
+            sprites.Clear();
+            loseScene.Reset();
+            isCutscenePlaying = true;
+        }
         #region LoadNewContent
         private void LoadRocket(Rocket rocket)
         {
