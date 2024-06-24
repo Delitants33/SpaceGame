@@ -65,7 +65,6 @@ namespace Space
         private void Update()
         {
             string mes = "You have lost";
-            //Camera.Follow(new Vector2(originalPos.X, originalPos.Y));
             timer += 1f;
             int screenWidth = graphicsDevice.PresentationParameters.BackBufferWidth;
             int screenHeight = graphicsDevice.PresentationParameters.BackBufferHeight;
@@ -84,11 +83,9 @@ namespace Space
                 }
                 message = mes[..len];
             }
-            if (Vector2.Distance(originalPos, new Vector2(screenWidth / 2f + 1150, screenHeight / 2f - 50)) < 10f)
+            if (Vector2.Distance(originalPos, new Vector2(screenWidth / 2f + 1150, screenHeight / 2f - 50)) < 70f)
             {
-
                 game.RestartGame();
-
             }
         }
         public void Reset()

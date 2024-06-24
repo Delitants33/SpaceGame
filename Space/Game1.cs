@@ -40,6 +40,8 @@ namespace Space
             Camera.Zoom = 3f;
             Creator.NewPlanetCreated += LoadNewPlanet;
             Creator.NewRocketCreated += LoadRocket;
+            Creator.NewStarCreated += LoadNewStar;
+            Creator.NewAsteroidCreated += LoadNewAsteroid;
             Controller.RocketLaunched += HandleLaunch;
             Controller.StartGame += StartGame;
             Controller.OnPlanetHover += OnPlanetHover;
@@ -90,19 +92,21 @@ namespace Space
 
         protected override void Draw(GameTime gameTime)
         {
-            
             GraphicsDevice.Clear(Color.Black);
+
             if (isCutscenePlaying)
             {
-                //Camera.Follow(new Vector2(-1000, 0));
-                loseScene.Play(font); return;
+                loseScene.Play(font); 
+                return;
             }
+
             _spriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: Camera.TranslationMatrix);
             if (isGameStarted)
             {
                 Trajectory.DrawTrajectory(GameManager.rocket, _spriteBatch);
                 Trajectory.DrawOrbit(GameManager.nextPlanet, _spriteBatch, gameTime);
             }
+
             foreach (var sprite in sprites)
             {
                 _spriteBatch.Draw(sprite.texture,
@@ -127,7 +131,7 @@ namespace Space
             }
             base.Draw(gameTime);
         }
-
+        #region Custom
         public void ToggleFullScreen()
         {
             _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
@@ -166,6 +170,8 @@ namespace Space
             loseScene.Reset();
             isCutscenePlaying = true;
         }
+        #endregion Custom
+
         #region LoadNewContent
         private void LoadRocket(Rocket rocket)
         {
@@ -177,12 +183,33 @@ namespace Space
 
         private void LoadNewPlanet(Planet planet)
         {
-            var rand = new Random();
-            var planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1,32)), planet.Position,1.25f);
+            Sprite planetSprite;
+            if (planet.Position == Vector2.Zero)
+                planetSprite = new Sprite(Content.Load<Texture2D>("startPlanet"), planet.Position, 1.25f);
+            else
+            {
+                var rand = new Random();
+                planetSprite = new Sprite(Content.Load<Texture2D>("Planet" + rand.Next(1, 32)), planet.Position, 1.25f);
+            }
             planet.ObjectMoved += planetSprite.MoveSpriteTo;
             sprites.Add(planetSprite);
             if (startedPlanet == null)
                 startedPlanet = planetSprite;
+        }
+
+        private void LoadNewStar(Star star)
+        {
+            var starSprite = new Sprite(Content.Load<Texture2D>("Star"), star.Position, 0.05f);
+            star.ObjectMoved += starSprite.MoveSpriteTo;
+            sprites.Add(starSprite);
+        }
+
+        private void LoadNewAsteroid(Asteroid asteroid)
+        {
+            var rand = new Random();
+            var asteroidSprite = new Sprite(Content.Load<Texture2D>("Asteroid" + + rand.Next(1, 5)), asteroid.Position, 1f);
+            asteroid.ObjectMoved += asteroidSprite.MoveSpriteTo;
+            sprites.Add(asteroidSprite);
         }
         #endregion LoadNewContent
     }

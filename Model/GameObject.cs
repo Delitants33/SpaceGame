@@ -13,6 +13,11 @@ namespace Model
         public Vector2 Position { get; protected set; }
         public event Action<Vector2> ObjectMoved;
 
+
+        public GameObject() : this(Vector2.Zero)
+        {
+        }
+
         public GameObject (Vector2 startPosition)
         {
             Position = startPosition;   

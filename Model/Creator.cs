@@ -15,6 +15,8 @@ namespace Model
 
         public static event Action<Planet> NewPlanetCreated;
         public static event Action<Rocket> NewRocketCreated;
+        public static event Action<Star> NewStarCreated;
+        public static event Action<Asteroid> NewAsteroidCreated;
 
         public static Rocket CreateRocket(Vector2 startPosition,float maxSpeed = 8)
         {
@@ -35,6 +37,28 @@ namespace Model
             NewPlanetCreated(newPlanet);
             return newPlanet;
         }
+
+        public static Planet CreateNewPlanet(Rectangle rectangle, float radius = 150)
+        {
+            var newPlanet = new Planet(rectangle, radius);
+            Planets.Add(newPlanet);
+            NewPlanetCreated(newPlanet);
+            return newPlanet;
+        }
+
+        public static Star CreateNewStar(Vector2 startPosition)
+        {
+            var newStar = new Star(startPosition);
+            NewStarCreated(newStar);
+            return newStar;
+        }
         
+        public static Asteroid CreateNewAsteroid(Vector2 startPosition, float rotationSpeed, Planet parent)
+        {
+            var newAsteroid = new Asteroid(startPosition, rotationSpeed);
+            newAsteroid.parentPlanet = parent;
+            NewAsteroidCreated(newAsteroid);
+            return newAsteroid;
+        }
     }
 } 
