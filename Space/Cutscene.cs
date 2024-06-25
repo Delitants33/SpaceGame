@@ -64,6 +64,7 @@ namespace Space
 
         private void Update()
         {
+            Camera.Follow(originalPos + new Vector2(0.1f, 0.1f));
             string mes = "You have lost";
             timer += 1f;
             int screenWidth = graphicsDevice.PresentationParameters.BackBufferWidth;

@@ -20,7 +20,7 @@ namespace Space
         private static float screenWidth;
 
         private static float[] ParalaxPower = new float[] { 0.4f, 0.44f, 0.48f, 0.52f }; 
-        private static Color[] starColors = new Color[] { Color.Wheat,Color.White,Color.LightBlue, Color.SkyBlue};
+        private static Color[] starColors = new Color[] { Color.Yellow,Color.White,Color.Aqua, Color.OrangeRed};
 
         private static Vector2 BGSize = new Vector2(100,2500);
 
@@ -35,7 +35,7 @@ namespace Space
 
         public static void DrawNewStars()
         {
-            var rectangle = new Rectangle(new Point((int)LastDraw,0) + new Point(0,-(int)BGSize.Y/2), BGSize.ToPoint());
+            var rectangle = new Rectangle(new Point((int)LastDraw,0) + new Point(0, - (int)BGSize.Y/2), BGSize.ToPoint());
             for (int i = 0; i < countOfStars; i++)
             {
                 Random rnd = new Random();
@@ -54,7 +54,7 @@ namespace Space
             for (int i = 0; i < stars.Count; i++)
             {
                 spriteBatch.Draw(starTexture,
-                         new Rectangle(stars[i].X - (int)(Camera.Position.X * ParalaxPower[i%ParalaxPower.Length]),
+                         new Rectangle(stars[i].X - (int)(Camera.Position.X * ParalaxPower[i % ParalaxPower.Length]),
                          stars[i].Y - (int)(Camera.Position.Y * ParalaxPower[i % ParalaxPower.Length]),
                          stars[i].Width, stars[i].Height),
                          starColors[i%starColors.Length]);
@@ -63,7 +63,7 @@ namespace Space
 
         public static void CheckToDrawNewStars()
         {
-            if (Camera.Position.X > LastDraw + BGSize.X - screenWidth * 1.5)
+            if (Camera.Position.X > LastDraw + BGSize.X - 600 - screenWidth * 1.5)
             {
                 LastDraw += BGSize.X;
                 DrawNewStars();
