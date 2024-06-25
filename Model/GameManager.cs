@@ -96,6 +96,10 @@ namespace Model
         private static bool IsLose()
         {
             timer++;
+            if (rocket.velocity.X < 0)
+            {
+                return timer > 45;
+            }
             return timer > 200;
         } 
        
@@ -104,6 +108,7 @@ namespace Model
             rocket = Creator.CreateRocket(new Vector2(150, 0));
             planet = Creator.CreateNewPlanet(Vector2.Zero);
             nextPlanet = Creator.CreateNewPlanet(new Vector2(400, 200));
+            Asteroids.Clear();
             timer = 0;
             Score = 0;
             isLaunched = false;

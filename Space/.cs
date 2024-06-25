@@ -17,6 +17,7 @@ namespace Space
         private const int lineThickness = 3;
         private const int orbitDashesCount = 20;
         private const int dashesInOrbit = 10;
+        public static List<Rectangle> dashes = new ();
 
         public static void Initialize(GraphicsDeviceManager graphics)
         {
@@ -27,23 +28,42 @@ namespace Space
         public static void DrawTrajectory(Rocket rocket, SpriteBatch spriteBatch)
         {
             float rotation = rocket.Rotation - MathHelper.PiOver2;
-            int dashesCount = trajectoryLength / (dashLength + gap);
-            for (int i = 0; i < dashesCount; i++)
+            if (rocket.velocity == Vector2.Zero)
             {
-                float dashStartX = rocket.Position.X + i * (dashLength + gap) * (float)Math.Cos(rotation);
-                float dashStartY = rocket.Position.Y + i * (dashLength + gap) * (float)Math.Sin(rotation);
-                Rectangle lineRectangle = new Rectangle(
-                    (int)(dashStartX),
-                    (int)(dashStartY),
-                    dashLength,
-                    lineThickness);
-                if (Vector2.Distance(
-                    new Vector2(dashStartX, dashStartY),
-                    GameManager.nextPlanet.Position) < 
-                    GameManager.nextPlanet.Radius/2)
-                    break;
 
-                spriteBatch.Draw(line, lineRectangle, null, Color.DarkGray, rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
+                dashes.Clear();
+                int dashesCount = trajectoryLength / (dashLength + gap);
+                for (int i = 0; i < dashesCount; i++)
+                {
+                    float dashStartX = rocket.Position.X + i * (dashLength + gap) * (float)Math.Cos(rotation);
+                    float dashStartY = rocket.Position.Y + i * (dashLength + gap) * (float)Math.Sin(rotation);
+                    dashes.Add(new Rectangle(
+                        (int)(dashStartX),
+                        (int)(dashStartY),
+                        dashLength,
+                        lineThickness));
+                    if (Vector2.Distance(
+                        new Vector2(dashStartX, dashStartY),
+                        GameManager.nextPlanet.Position) <
+                        GameManager.nextPlanet.Radius / 2)
+                        break;
+
+                    spriteBatch.Draw(line, dashes[i], null, Color.DarkGray, rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
+                }
+            }
+            else
+            {
+                
+                for (int i = 0; i < dashes.Count; i++)
+                {
+
+                    if ((dashes[i].Location.X < rocket.Position.X && rocket.velocity.X > 0) 
+                        || (dashes[i].Location.X > rocket.Position.X && rocket.velocity.X < 0))
+                    {
+                        continue;
+                    }
+                    spriteBatch.Draw(line, dashes[i], null, Color.DarkGray, rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
+                }
             }
         }
 

@@ -13,7 +13,7 @@ namespace Model
     {
         public readonly float MaxSpeed; 
         public float Rotation { get; private set; } 
-        public Vector2 velocity;
+        public Vector2 velocity = Vector2.Zero;
 
         public event Action<float> RocketRotated;
         public event Action OnTieToPlanet;
@@ -58,6 +58,7 @@ namespace Model
         {
             if (Vector2.Distance(this.Position, planet.Position) < planet.Radius )
             {
+                velocity = Vector2.Zero;
                 OnTieToPlanet();
             }
         }

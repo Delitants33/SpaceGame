@@ -98,7 +98,10 @@ namespace Space
 
             if (isCutscenePlaying)
             {
-                loseScene.Play(font); 
+                _spriteBatchBG.Begin();
+                Paralax.Draw(_spriteBatchBG);
+                loseScene.Play(font);
+                _spriteBatchBG.End();
                 return;
             }
             _spriteBatchBG.Begin();
@@ -130,6 +133,7 @@ namespace Space
 
             if (isGameStarted) 
             { 
+
             _spriteBatchUI.Begin();
             _spriteBatchUI.DrawString(font, "Score " + GameManager.Score,
                 new Vector2(_graphics.PreferredBackBufferWidth / 2 - 50, 20), Color.White);
@@ -166,6 +170,8 @@ namespace Space
             Camera.Follow(GameManager.planet.Position);
             LoadRocket(GameManager.rocket);
             GameManager.rocket.MoveTo(150, 0);
+            GameManager.rocket.velocity = Vector2.Zero;
+            Trajectory.dashes.Clear();
             isGameStarted = false;
             
         }
@@ -174,6 +180,8 @@ namespace Space
         {
             sprites.Clear();
             loseScene.Reset();
+            GameManager.rocket.velocity = Vector2.Zero;
+            Trajectory.dashes.Clear();
             isCutscenePlaying = true;
         }
         #endregion Custom
