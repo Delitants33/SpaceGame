@@ -127,7 +127,7 @@ namespace Model
             {
                 Asteroids.Add( Creator.CreateNewAsteroid(nextPlanet.Position + 
                     new Vector2(nextPlanet.Radius + (float)rand.Next(50,120),0)
-                    ,rand.Next(2,50)/1000f
+                    ,rand.Next(2,45)/1000f
                     ,nextPlanet));
             }
         }
@@ -149,6 +149,8 @@ namespace Model
             {
                 if(Vector2.Distance(asteroid.Position, rocket.Position) < 35)
                     return true;
+                else if(Vector2.Distance(asteroid.Position, rocket.Position) > 2000)
+                    Asteroids.Remove(asteroid);
             }
             return false;
         }
