@@ -20,7 +20,7 @@ namespace Space
         private static float screenWidth;
 
         private static float[] ParalaxPower = new float[] { 0.4f, 0.44f, 0.48f, 0.52f }; 
-        private static Color[] starColors = new Color[] { Color.Yellow,Color.White,Color.Aqua, Color.OrangeRed};
+        private static Color[] starColors = new Color[] { Color.Yellow,Color.White,Color.Aqua, Color.Wheat};
 
         private static Vector2 BGSize = new Vector2(100,2500);
 

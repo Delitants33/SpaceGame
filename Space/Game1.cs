@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -50,12 +52,17 @@ namespace Space
             Controller.RestartGame += RestartGame;
             GameManager.Initialize();
             GameManager.GameLost += StopGame;
+            GameManager.GameLost += PlayDeathSound;
+            GameManager.StarCollected += PlayStarRecieveSound;
+            GameManager.OnLaunch += PlayLaunchSound;
 
-            Trajectory.Initialize(_graphics);
             Paralax.Initialize(_graphics);
-
+            Trajectory.Initialize(_graphics);
+            
             Camera.Follow(GameManager.planet.Position);
             base.Initialize();
+            SoundManager.PlaySFX(SoundManager.gameStart);
+            SoundManager.PlaySong(SoundManager.ambience);
         }
 
         protected override void LoadContent()
@@ -66,11 +73,11 @@ namespace Space
             Controller.FullScreenToggled += ToggleFullScreen;
             font = Content.Load<SpriteFont>("Fonts/pixelmix");
             loseScene = new Cutscene(GraphicsDevice, Content.Load<Texture2D>("damaged"), this);
+            LoadAllSounds();
         }
 
         protected override void Update(GameTime gameTime)
         {
-            
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -142,6 +149,12 @@ namespace Space
             base.Draw(gameTime);
         }
         #region Custom
+
+        private void PlayTieSound() => SoundManager.PlaySFX(SoundManager.Tie);
+        private void PlayLaunchSound() => SoundManager.PlaySFX(SoundManager.launch);
+        private void PlayDeathSound() => SoundManager.PlaySFX(SoundManager.death);
+        private void PlayStarRecieveSound() => SoundManager.PlaySFX(SoundManager.starRecieve);
+
         public void ToggleFullScreen()
         {
             _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
@@ -192,6 +205,7 @@ namespace Space
             var rocketSprite = new Sprite(Content.Load<Texture2D>("spaceship"), rocket.Position,2f);
             rocket.ObjectMoved += rocketSprite.MoveSpriteTo;
             rocket.RocketRotated += rocketSprite.Rotate;
+            rocket.OnTieToPlanet += PlayTieSound;
             sprites.Add(rocketSprite);
         }
 
@@ -224,6 +238,16 @@ namespace Space
             var asteroidSprite = new Sprite(Content.Load<Texture2D>("Asteroid" + + rand.Next(1, 5)), asteroid.Position, 1f);
             asteroid.ObjectMoved += asteroidSprite.MoveSpriteTo;
             sprites.Add(asteroidSprite);
+        }
+
+        private void LoadAllSounds()
+        {
+            SoundManager.ambience = Content.Load<Song>("Audio/ambience");
+            SoundManager.launch = Content.Load<SoundEffect>("Audio/launch");
+            SoundManager.Tie= Content.Load<SoundEffect>("Audio/Tie");
+            SoundManager.death = Content.Load<SoundEffect>("Audio/death");
+            SoundManager.gameStart = Content.Load<SoundEffect>("Audio/gameStart");
+            SoundManager.starRecieve = Content.Load<SoundEffect>("Audio/starRecieve");
         }
         #endregion LoadNewContent
     }

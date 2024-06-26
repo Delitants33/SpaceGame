@@ -23,8 +23,11 @@ namespace Model
         private static bool isClockwise = false;
         public static int Score { get; private set; }
         private static int timer = 0;
+        private static bool isFirstTime = true;
 
         public static event Action GameLost;
+        public static event Action StarCollected;
+        public static event Action OnLaunch;
 
         public static void Initialize() 
         {
@@ -42,7 +45,10 @@ namespace Model
         public static void Update() 
         {
             if (CheckStarCollect())
+            {
+                StarCollected();
                 Score++;
+            }
             if (CheckAsteroidCrush())
                 GameLost();
             if (isLaunched)
@@ -51,9 +57,15 @@ namespace Model
                 rocket.IsReachablePlanets(nextPlanet);
                 if (IsLose()) 
                     GameLost();
+                if (isFirstTime) 
+                {
+                    OnLaunch();
+                    isFirstTime = false;
+                }
             }
             else
             {
+                isFirstTime = true;
                 timer = 0;
                 rocket.RotateAround(planet.Position, 0.05f,isClockwise);
             }
@@ -154,8 +166,8 @@ namespace Model
             {
                 if(Vector2.Distance(asteroid.Position, rocket.Position) < 35)
                     return true;
-                else if(Vector2.Distance(asteroid.Position, rocket.Position) > 2000)
-                    Asteroids.Remove(asteroid);
+                //else if(Vector2.Distance(asteroid.Position, rocket.Position) > 2000)
+                   // Asteroids.Remove(asteroid);
             }
             return false;
         }

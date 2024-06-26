@@ -61,6 +61,42 @@
 /processorParam:TextureFormat=Color
 /build:Asteroid4.png
 
+#begin Audio/ambience.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Audio/ambience.wav
+
+#begin Audio/death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/death.wav
+
+#begin Audio/gameStart.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/gameStart.wav
+
+#begin Audio/launch.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/launch.wav
+
+#begin Audio/starRecieve.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/starRecieve.wav
+
+#begin Audio/Tie.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Audio/Tie.wav
+
 #begin Blue.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -73,6 +109,18 @@
 /processorParam:TextureFormat=Color
 /build:Blue.png
 
+#begin Fonts/ambience.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fonts/ambience.wav
+
+#begin Fonts/death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fonts/death.wav
+
 #begin Fonts/File.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -80,12 +128,36 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/File.spritefont
 
+#begin Fonts/gameStart.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fonts/gameStart.wav
+
+#begin Fonts/launch.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fonts/launch.wav
+
 #begin Fonts/pixelmix.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/pixelmix.spritefont
+
+#begin Fonts/starRecieve.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fonts/starRecieve.wav
+
+#begin Fonts/Tie.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Fonts/Tie.wav
 
 #begin Main Ship - Base - Full health.png
 /importer:TextureImporter

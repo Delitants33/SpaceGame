@@ -47,7 +47,8 @@ namespace Model
             RocketRotated(Rotation);
         }
 
-        public void Launch(float speed) {
+        public void Launch(float speed) 
+        {
             velocity = new Vector2(
                 (float)Math.Cos(Rotation + 3 * Math.PI / 2),
                 (float)Math.Sin(Rotation + 3 * Math.PI / 2)) * speed;  
