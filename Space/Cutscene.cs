@@ -52,7 +52,9 @@ namespace Space
             spriteBatch.DrawString(
                 font,
                 message,
-                new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth / 2 - messageOffset, graphicsDevice.PresentationParameters.BackBufferHeight / 2 - 70),
+                new Vector2(
+                    graphicsDevice.PresentationParameters.BackBufferWidth / 2 - messageOffset,
+                    graphicsDevice.PresentationParameters.BackBufferHeight / 2 - 70),
                 Color.DarkRed,
                 0f,
                 Vector2.Zero,

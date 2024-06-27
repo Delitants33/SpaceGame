@@ -11,6 +11,7 @@ namespace Model
     public class Planet : GameObject
     {
         public float Radius;
+        public bool isInSystem;
 
         public Planet(Vector2 position, float radius) : base(position)
         {

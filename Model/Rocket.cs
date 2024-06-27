@@ -55,13 +55,15 @@ namespace Model
             MoveBy(velocity);
         }
 
-        public void IsReachablePlanets(Planet planet) 
+        public Planet? IsReachablePlanets(Planet planet) 
         {
             if (Vector2.Distance(this.Position, planet.Position) < planet.Radius )
             {
                 velocity = Vector2.Zero;
                 OnTieToPlanet();
+                return planet;
             }
+            return null;
         }
     }
 }

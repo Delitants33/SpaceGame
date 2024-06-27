@@ -92,8 +92,13 @@ namespace Space
 
             if (isGameStarted)
             {
+                
                 Camera.Zoom = MathHelper.Lerp(Camera.Zoom,1f,0.05f);
                 Camera.Follow((GameManager.planet.Position + GameManager.nextPlanet.Position) / 2, 0.05f);
+                if (GameManager.activePlanets.Count > 1) {
+                    var centralPoint = (GameManager.activePlanets[0].Position + GameManager.activePlanets[1].Position) / 2;
+                    Camera.Follow( (centralPoint + GameManager.planet.Position) / 2, 0.3f);
+                }
             }
             
             base.Update(gameTime);
@@ -120,7 +125,11 @@ namespace Space
             if (isGameStarted)
             {
                 Trajectory.DrawTrajectory(GameManager.rocket, _spriteBatch);
-                Trajectory.DrawOrbit(GameManager.nextPlanet, _spriteBatch, gameTime);
+                foreach (var p in GameManager.activePlanets)
+                {
+                    Trajectory.DrawOrbit(p, _spriteBatch, gameTime);
+                }
+
             }
 
             foreach (var sprite in sprites)
@@ -135,6 +144,7 @@ namespace Space
                 SpriteEffects.None,
                 1.0f);
             }
+            
 
             _spriteBatch.End();
 
@@ -186,7 +196,6 @@ namespace Space
             GameManager.rocket.velocity = Vector2.Zero;
             Trajectory.dashes.Clear();
             isGameStarted = false;
-            
         }
 
         private void StopGame()

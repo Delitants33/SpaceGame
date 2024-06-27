@@ -12,6 +12,7 @@ namespace Model
     {
         public Vector2 Position { get; protected set; }
         public event Action<Vector2> ObjectMoved;
+        public Vector2 RotatedBy { get; protected set; }
 
 
         public GameObject() : this(Vector2.Zero)
@@ -39,6 +40,8 @@ namespace Model
 
         public virtual void RotateAround(Vector2 center, float rotationSpeed, bool isClockWise = true)
         {
+            var initialPosition = this.Position; 
+
             var distanceToCenter = Vector2.Distance(center, Position);
             var angle = Math.Atan2(this.Position.Y - center.Y, this.Position.X - center.X);
             angle = isClockWise ?
@@ -46,6 +49,9 @@ namespace Model
                 angle - rotationSpeed;
             var ToObject = new Vector2((float)Math.Cos(angle) * distanceToCenter, (float)Math.Sin(angle) * distanceToCenter);
             this.MoveTo(ToObject + center);
+            this.RotatedBy = this.Position - initialPosition; 
+
         }
+
     }
 }

@@ -42,12 +42,13 @@ namespace Space
                         (int)(dashStartY),
                         dashLength,
                         lineThickness));
+                    /*
                     if (Vector2.Distance(
                         new Vector2(dashStartX, dashStartY),
                         GameManager.nextPlanet.Position) <
                         GameManager.nextPlanet.Radius / 2)
                         break;
-
+                    */
                     spriteBatch.Draw(line, dashes[i], null, Color.DarkGray, rotation, Vector2.Zero, SpriteEffects.None, 0.1f);
                 }
             }

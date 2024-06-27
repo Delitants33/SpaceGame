@@ -32,7 +32,8 @@ namespace Model
 
         public static Planet CreateNewPlanet(Vector2 startPosition, float radius = 150)
         {
-            var newPlanet = new Planet(startPosition, radius);
+            
+            var newPlanet = new Planet(startPosition, new Random().Next((int)radius - 20, (int)radius + 21));
             Planets.Add(newPlanet);
             NewPlanetCreated(newPlanet);
             return newPlanet;
@@ -40,7 +41,8 @@ namespace Model
 
         public static Planet CreateNewPlanet(Rectangle rectangle, float radius = 150)
         {
-            var newPlanet = new Planet(rectangle, radius);
+
+            var newPlanet = new Planet(rectangle, new Random().Next((int)radius - 20, (int)radius + 21));
             Planets.Add(newPlanet);
             NewPlanetCreated(newPlanet);
             return newPlanet;
