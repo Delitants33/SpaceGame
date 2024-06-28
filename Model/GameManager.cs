@@ -156,10 +156,7 @@ namespace Model
 
         private static void CreatePlanetarySystem()
         {
-            if ( !planet.isInSystem)
-            {
-                planetSystems.Clear();
-            }
+            
             var centralPoint = nextPlanet.Position;
             if (activePlanets.Count > 1)
             {
@@ -183,7 +180,10 @@ namespace Model
                     ? activePlanets[1]
                     : activePlanets[0];
             }
-
+            if (!planet.isInSystem)
+            {
+                planetSystems.Clear();
+            }
             nextPlanet = planet1;
             activePlanets.Clear();
             activePlanets.Add(planet1);
