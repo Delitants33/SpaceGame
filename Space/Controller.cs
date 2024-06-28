@@ -6,7 +6,6 @@ namespace Space
 {
     internal static class Controller
     {
-        public static event Action FullScreenToggled;
         public static event Action RocketLaunched;
         public static event Action StartGame;
         public static event Action OnPlanetHover;
@@ -32,9 +31,7 @@ namespace Space
             {
                 OnPlanetDeHover();
             }
-            if (Keyboard.GetState().IsKeyDown (Keys.F11)) {
-                FullScreenToggled();
-            }
+            
             if(Keyboard.GetState().IsKeyDown(Keys.Space) && isGameStarted)
             {
                 RocketLaunched();

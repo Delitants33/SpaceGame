@@ -70,7 +70,6 @@ namespace Space
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _spriteBatchUI = new SpriteBatch(GraphicsDevice);
             _spriteBatchBG = new SpriteBatch(GraphicsDevice);
-            Controller.FullScreenToggled += ToggleFullScreen;
             font = Content.Load<SpriteFont>("Fonts/pixelmix");
             loseScene = new Cutscene(GraphicsDevice, Content.Load<Texture2D>("damaged"), this);
             LoadAllSounds();
@@ -165,13 +164,7 @@ namespace Space
         private void PlayDeathSound() => SoundManager.PlaySFX(SoundManager.death);
         private void PlayStarRecieveSound() => SoundManager.PlaySFX(SoundManager.starRecieve);
 
-        public void ToggleFullScreen()
-        {
-            _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
-            _graphics.IsFullScreen = !_graphics.IsFullScreen;
-            _graphics.ApplyChanges();
-        }
+     
 
         private void HandleLaunch() => GameManager.Launch();
 
