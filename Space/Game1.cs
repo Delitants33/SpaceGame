@@ -32,7 +32,7 @@ namespace Space
             _graphics.IsFullScreen = false;
             _graphics.PreferredBackBufferHeight = 900;
             _graphics.PreferredBackBufferWidth = 1600;
-            Window.AllowUserResizing = true;
+            //Window.AllowUserResizing = true;
         }
 
         protected override void Initialize()
